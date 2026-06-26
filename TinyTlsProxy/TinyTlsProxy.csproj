@@ -25,5 +25,6 @@
     <PackageReference Include="Rebex.Tls" Version="8.0.9673" />
     <PackageReference Include="Rebex.Elliptic.Castle" Version="1.2.2" />
     <PackageReference Include="Rebex.Elliptic.Curve25519" Version="1.2.2" />
+    <PackageReference Include="Rebex.PQC.Castle" Version="1.0.29" />
   </ItemGroup>
 </Project>

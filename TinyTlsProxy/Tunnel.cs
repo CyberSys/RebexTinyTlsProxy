@@ -15,6 +15,21 @@ namespace Rebex.Proxy
 		private const int BUFFER_SIZE = 64 * 1024;
 		private static readonly TimeSpan CLOSE_TIMEOUT = TimeSpan.FromSeconds(5);
 		private static readonly TimeSpan CLOSE_FAST_TIMEOUT = TimeSpan.FromMilliseconds(500);
+		private static readonly TlsNamedGroup[] NamedGroups = {
+			new TlsNamedGroup(TlsNamedGroup.X25519MLKEM768.Name, generateKeyShareInClientHello: false),
+			new TlsNamedGroup(TlsNamedGroup.SecP256r1MLKEM768.Name, generateKeyShareInClientHello: false),
+			new TlsNamedGroup(TlsNamedGroup.SecP384r1MLKEM1024.Name, generateKeyShareInClientHello: false),
+			TlsNamedGroup.X25519,
+			TlsNamedGroup.Secp256r1,
+			new TlsNamedGroup(TlsNamedGroup.Secp384r1.Name, generateKeyShareInClientHello: false),
+			new TlsNamedGroup(TlsNamedGroup.Secp521r1.Name, generateKeyShareInClientHello: false),
+			new TlsNamedGroup(TlsNamedGroup.BrainpoolP256r1tls13.Name, generateKeyShareInClientHello: false),
+			new TlsNamedGroup(TlsNamedGroup.BrainpoolP384r1tls13.Name, generateKeyShareInClientHello: false),
+			new TlsNamedGroup(TlsNamedGroup.BrainpoolP512r1tls13.Name, generateKeyShareInClientHello: false),
+			new TlsNamedGroup(TlsNamedGroup.Ffdhe2048.Name, generateKeyShareInClientHello: false),
+			new TlsNamedGroup(TlsNamedGroup.Ffdhe3072.Name, generateKeyShareInClientHello: false),
+			new TlsNamedGroup(TlsNamedGroup.Ffdhe4096.Name, generateKeyShareInClientHello: false),
+			};
 
 		private static int _nextId;
 
@@ -75,6 +90,8 @@ namespace Rebex.Proxy
 			inbound.Parameters.Version = Binding.InboundTlsVersions;
 			inbound.Parameters.Entity = TlsConnectionEnd.Server;
 			inbound.Parameters.Certificate = settings.ServerCertificate;
+			inbound.Parameters.AllowedCurves = TlsEllipticCurve.All;
+			inbound.Parameters.SetNamedGroups(NamedGroups);
 			if (settings.WeakCiphers)
 			{
 				inbound.Parameters.AllowedSuites |= TlsCipherSuite.Weak;
@@ -107,6 +124,8 @@ namespace Rebex.Proxy
 			outbound.Timeout = settings.TimeoutMilliseconds;
 			outbound.Parameters.Version = Binding.OutboundTlsVersions;
 			outbound.Parameters.Entity = TlsConnectionEnd.Client;
+			outbound.Parameters.AllowedCurves = TlsEllipticCurve.All;
+			outbound.Parameters.SetNamedGroups(NamedGroups);
 			if (settings.WeakCiphers)
 			{
 				outbound.Parameters.AllowedSuites |= TlsCipherSuite.Weak;

@@ -33,9 +33,12 @@ namespace Rebex.Proxy
 
 			// register NIST and Brainpool curves
 			AsymmetricKeyAlgorithm.Register(EllipticCurveAlgorithm.Create);
-
 			// register Curve25519
 			AsymmetricKeyAlgorithm.Register(Curve25519.Create);
+			// register ML-KEM
+			AsymmetricKeyAlgorithm.Register(MLKem.Create);
+			// register ML-DSA
+			AsymmetricKeyAlgorithm.Register(MLDsa.Create);
 
 			// initialize logger
 			var logger = new ConsoleLogWriter(config.LogLevel);
